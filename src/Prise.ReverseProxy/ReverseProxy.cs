@@ -42,6 +42,10 @@ namespace Prise.Proxy
         {
             var callingMethod = GetCallingMethod();
             var methodInfo = PriseProxy.FindMethodOnObject(callingMethod as MethodInfo, this);
+
+            if (methodInfo.IsGenericMethod)
+                methodInfo = methodInfo.MakeGenericMethod();
+
             if (methodInfo.GetParameters().Count() != parameters.Count())
                 throw new ReverseProxyException($"The number of parameters provided to this ReverseProxy {parameters?.Count()} do not match the actual parameter count of the hostService method ({methodInfo.GetParameters().Count()}). Did you forget to provide the correct number of parameters?");
 
